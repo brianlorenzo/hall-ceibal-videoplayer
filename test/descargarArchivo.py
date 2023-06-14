@@ -10,8 +10,8 @@ def check_and_download_file(file_name, file_url):
         print("Descarga completada.")
 
 # Especifica el nombre del archivo y el enlace de Google Drive
-nombre_archivo = "piso_y_bola.mp4"
-enlace_google_drive = "https://drive.google.com/file/d/1J3HI8k-S2PXvz7wv5uAn7syd-sCjXO19/view?usp=drive_link"
+nombre_archivo = "olimpiada(1080).mp4"
+enlace_google_drive = "https://drive.google.com/file/d/1K_k2YGBj2BdTZeEzOxg0tmFKhzWbS5t2/view?usp=drive_link"
 
 # Llama a la función para verificar y descargar el archivo si es necesario
 check_and_download_file(nombre_archivo, enlace_google_drive)
