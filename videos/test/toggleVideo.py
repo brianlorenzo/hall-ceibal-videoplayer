@@ -15,10 +15,12 @@ def play_video(player, media):
 instance = vlc.Instance()
 player = instance.media_player_new()
 
+#Poner en pantalla completa
 player.toggle_fullscreen()
 
 # Create libVLC objects representing the video
 video1 = vlc.Media('../enlace360_360p.mp4')
+video2 = vlc.Media('../olimp2022_360p.mp4')
 
 # setting media to the media player
 player.set_media(video1)
@@ -33,10 +35,20 @@ play_video(player, video1)
 
 # Espera a que el usuario cierre la ventana de VLC
 while True:
+    
     # Detecta si se presiona la tecla "q" para cerrar el video
     if player.get_state() == vlc.State.Ended:
             play_video(player, current_video)
 
+    if keyboard.is_pressed('s'):
+        if current_video == video1:
+            current_video = video2
+
+        if current_video == video2:
+            current_video = video1 
+        
+        play_video(player, current_video)
+        
     if keyboard.is_pressed('q'):
         player.stop()
         break
