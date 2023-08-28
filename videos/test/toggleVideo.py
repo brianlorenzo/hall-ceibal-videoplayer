@@ -31,15 +31,11 @@ player.set_media(video1)
 
 current_video = video1
 
-play_video(player, video1)
+play_video(player, current_video)
 
 # Espera a que el usuario cierre la ventana de VLC
 while True:
-    
-    # Detecta si se presiona la tecla "q" para cerrar el video
-    if player.get_state() == vlc.State.Ended:
-            play_video(player, current_video)
-
+    # Si se apreta 's' de switch
     if keyboard.is_pressed('s'):
         if current_video == video1:
             current_video = video2
@@ -48,7 +44,12 @@ while True:
             current_video = video1 
         
         play_video(player, current_video)
-        
+
+    # Si se apreta 'q' de quit
     if keyboard.is_pressed('q'):
         player.stop()
         break
+
+    # Detecta si se presiona la tecla "q" para cerrar el video
+    if player.get_state() == vlc.State.Ended:
+            play_video(player, current_video)
