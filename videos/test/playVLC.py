@@ -1,4 +1,6 @@
-#import RPi.GPIO as GPIO
+#Ref:   https://github.com/iadjedj/lgp_rpi_video
+#       Tutorial: https://www.youtube.com/watch?v=Y3SJ8qLqQA8
+
 import vlc
 import keyboard
 
@@ -12,13 +14,18 @@ instance = vlc.Instance()
 player = instance.media_player_new()
 
 # Create libVLC objects representing the video
-video1 = vlc.Media('./drones(1080p).mp4')
+video1 = vlc.Media('../enlace360_360p.mp4')
+
+current_video = video1
 
 play_video(player, video1)
 
 # Espera a que el usuario cierre la ventana de VLC
 while True:
     # Detecta si se presiona la tecla "q" para cerrar el video
+    if player.get_state() == vlc.State.Ended:
+            play_video(player, current_video)
+
     if keyboard.is_pressed('q'):
         player.stop()
         break
