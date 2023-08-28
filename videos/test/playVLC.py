@@ -25,7 +25,7 @@ player.set_media(video1)
  
 # setting play rate
 # doubles the speed of the video
-player.set_rate(5)
+player.set_rate(10)
 
 
 current_video = video1
