@@ -1,0 +1,2 @@
+# Ignorar archivos de video .mp4
+*.mp4
