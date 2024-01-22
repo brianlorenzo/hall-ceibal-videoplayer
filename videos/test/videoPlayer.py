@@ -1,7 +1,7 @@
 import vlc
 
 # Ruta completa del archivo de video
-ruta_video = 'olimp2022(360p).mp4'
+ruta_video = '../olimpiada(1080).mp4'
 
 # Crear instancia del reproductor VLC
 vlc_instance = vlc.Instance()
