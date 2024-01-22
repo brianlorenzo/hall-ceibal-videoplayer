@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+import time
 import vlc
 import keyboard
 import logging
@@ -32,6 +37,7 @@ def main():
 
     instance = vlc.Instance()
     player = instance.media_player_new()
+    player.toggle_fullscreen()
 
     # Cambiar la ruta del archivo según sea necesario
     videos_file_path = 'videos.txt'
@@ -39,26 +45,37 @@ def main():
     videos = load_videos_from_file(videos_file_path)
 
     current_video_index = 0
-    current_id = videos[current_video_index]['id']
+    current_data = videos[current_video_index]['id']
     videos[current_video_index]['media'] = vlc.Media(videos[current_video_index]['path'])
     play_video(player, videos[current_video_index]['media'])
 
-    # Espera a que el usuario cierre la ventana de VLC
-    while True:
-        try:
-            if keyboard.is_pressed('s'):
-                logger.info("Se presionó la tecla S")
-                current_video_index = switch_video(current_video_index, videos, player)
-                current_id = videos[current_video_index]['id']
+    reader = SimpleMFRC522()
 
-            # Verificar si 'current_id' es igual a la 'id' de algún video
-            if any(video['id'] == current_id for video in videos):
-                index = next(i for i, video in enumerate(videos) if video['id'] == current_id)
-                if current_video_index != index:
-                    current_video_index = index
-                    if videos[current_video_index]['media'] is None:
-                        videos[current_video_index]['media'] = vlc.Media(videos[current_video_index]['path'])
-                    play_video(player, videos[current_video_index]['media'])
+    try:
+        # Espera a que el usuario cierre la ventana de VLC
+        while True:
+            print("Esperando a leer tag...")
+
+            id, data = reader.read()
+
+            # Convertir los datos a cadena y limpiar espacios en blanco
+            data_str = str(data).strip()
+
+            # Si es un nuevo tag o el primer tag leído
+            if data_str != current_data or current_data is None:
+                print(f"Nuevo Tag detectado: {data_str}")
+                current_data = data_str
+
+                # Asociar el tag al video correspondiente
+                if any(video['id'].strip() == current_data for video in videos):
+                    index = next(i for i, video in enumerate(videos) if video['id'].strip() == current_data)
+                    if current_video_index != index:
+                        current_video_index = index
+                        if videos[current_video_index]['media'] is None:
+                            videos[current_video_index]['media'] = vlc.Media(videos[current_video_index]['path'])
+                        play_video(player, videos[current_video_index]['media'])
+
+                print("Esperando a leer tag...")
 
             if keyboard.is_pressed('q'):
                 player.stop()
@@ -66,13 +83,15 @@ def main():
 
             if player.get_state() == vlc.State.Ended:
                 current_video_index = switch_video(current_video_index, videos, player)
-                current_id = videos[current_video_index]['id']
+                current_data = videos[current_video_index]['id']
 
             # Actualizar la variable con la última ID
-            print(f"Última ID actualizada: {current_id}")
+            print(f"Última ID actualizada: {current_data}")
 
-        except Exception as e:
-            logger.error(f"Error: {e}")
-
+    except Exception as e:
+        logger.error(f"Error: {e}")
+    finally:
+        GPIO.cleanup()
+            
 if __name__ == "__main__":
     main()
