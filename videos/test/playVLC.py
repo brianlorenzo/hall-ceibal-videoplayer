@@ -18,7 +18,7 @@ player = instance.media_player_new()
 player.toggle_fullscreen()
 
 # Create libVLC objects representing the video
-video1 = vlc.Media('../enlace360_360p.mp4')
+video1 = vlc.Media('../enlace360(360p).mp4')
 
 # setting media to the media player
 player.set_media(video1)

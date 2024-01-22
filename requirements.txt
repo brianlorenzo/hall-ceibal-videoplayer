@@ -1,7 +1,10 @@
+# Versiones
 python version = 3.9.2
 pip version = 23.3.2
 
+# Bibliotecas
 python-vlc
 gdown
 mfrc522
 RPi.GPIO
+keyboard
