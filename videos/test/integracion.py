@@ -37,7 +37,7 @@ def main():
 
     instance = vlc.Instance()
     player = instance.media_player_new()
-    player.toggle_fullscreen()
+    #player.toggle_fullscreen()
 
     # Cambiar la ruta del archivo según sea necesario
     videos_file_path = 'videos.txt'
