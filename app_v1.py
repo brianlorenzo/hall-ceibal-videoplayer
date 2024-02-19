@@ -38,8 +38,8 @@ def inicializar_player():
 
     instance = vlc.Instance()
     player = instance.media_player_new()
-    #player.toggle_fullscreen()
-    player.set_rate(10)
+    player.toggle_fullscreen()
+    player.set_rate(2)
     return player
 
 def play_video(player, media):

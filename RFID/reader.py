@@ -18,10 +18,10 @@ def read_data():
 
             # Si es un nuevo tag o el primer tag leído
             if id != last_id or last_id is None:
-                #print("Tag detectado:")
+                print("Tag detectado")
                 #print(f"ID: {id}")
                 print(f"Data: {data}")
-                print("Data es de tipo",type(data))
+               #print("Data es de tipo",type(data))
                 last_id = id
                 time.sleep(1)
                 print("Esperando a leer tag...")
