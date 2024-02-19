@@ -1,3 +1,4 @@
 enlace,./videos/enlace360(360p).mp4
 olimpiada,./videos/olimpiada(360p).mp4
 otro,./videos/otro_video.mp4
+standby,./videos/standby.mp4

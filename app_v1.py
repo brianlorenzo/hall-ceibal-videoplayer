@@ -39,6 +39,7 @@ def inicializar_player():
     instance = vlc.Instance()
     player = instance.media_player_new()
     #player.toggle_fullscreen()
+    player.set_rate(10)
     return player
 
 def play_video(player, media):
@@ -89,10 +90,12 @@ def handle_tag_reading(videos, player):
     reader = SimpleMFRC522()
 
     # Inicializa el index de video actual en 0 y los datos en None
-    current_video_index = 0
+    current_video_index = -1  # Cambiado a -1 para que el standby sea el último video
     current_data = None
-    
-    # ------------- Lugar para inicializar con video de standby ----------- #
+
+    # Inicializa el último video de la lista como el video de standby
+    standby_video = videos[current_video_index]['path']
+    play_video(player, vlc.Media(standby_video))
  
     # Si no se indica salir, espera a la lectura de un nuevo tag
     while not exit_flag:
@@ -127,6 +130,8 @@ def main():
     videos_file_path = './videos/videos.txt'
 
     videos = cargar_videos_de_archivo(videos_file_path)
+    standby_video = videos[-1]['path']
+
     player = inicializar_player()
 
     try:
@@ -140,6 +145,13 @@ def main():
 
         # Esperar a que el usuario cierre la ventana de VLC o presione 'q'
         while not exit_flag:
+            
+            # Si el video termina ir al video de standby
+            if player.get_state() == vlc.State.Ended:
+                play_video(player, vlc.Media(standby_video))
+            
+            # F E A T U R E : Siempre hay que volver a poner uno nuevo, no puede ser el mismo ;)
+            
             time.sleep(0.1)
 
     except Exception as e:
