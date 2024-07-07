@@ -1,198 +1,40 @@
-# Bibliotecas
-# SISTEMA
+# AUXILIARES
+import time 
+import keyboard 
+import logging 
+import threading 
+import io
 
+# SISTEMA
 import sys
 import os.path
+# Agrego al PATH el directorio del repositorio
 directorio_actual = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(directorio_actual, "../DRIVE"))
+sys.path.append(os.path.join(directorio_actual, "../videos"))
+sys.path.append(os.path.join(directorio_actual, "../RFID"))
+sys.path.append(os.path.join(directorio_actual, "../WEB"))
 
 # GOOGLE DRIVE
-sys.path.append(os.path.join(directorio_actual, "DRIVE"))
-
 from google_drive_api import *
+"""GUARDAR EL ARCHIVO 'credentials.json' EN ESTA CARPETA"""
 
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseDownload
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.http import MediaFileUpload
+# VIDEO PLAYER
+from video_player_utils import *
 
 # RFID
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
-#from rfid_utils import *
-
-# VIDEO PLAYER
-import vlc
-#from videoplayer import *
-
-import time #Se queda aca
-
-import keyboard #Se queda aca
-import logging #Se queda aca
-import threading #Se queda aca
-import io
 
 
+# Configuracion de API Google Drive
+SCOPES = ['https://www.googleapis.com/auth/drive']
+id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
+download_path = '../videos/'
 
 # Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
 cerrar_aplicacion = False  
 
-# Configuracion de Google Drive
-SCOPES = ['https://www.googleapis.com/auth/drive']
-id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
-download_path = '../videos/'
-# GUARDAR EL ARCHIVO 'credentials.json' EN ESTA CARPETA
-
-
-def obtener_credenciales():
-    """Obtiene las credenciales del usuario para acceder a la API de Google Drive.
-    Si no existen o no son válidas, inicia el flujo de autenticación.
-    """
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    return creds
-
-
-def listar_archivos_en_carpeta(service, id_carpeta):
-    """Lista todos los archivos en una carpeta específica de Google Drive.
-
-    Args:
-        service: El servicio de la API de Drive.
-        id_carpeta: El ID de la carpeta en Google Drive.
-
-    Returns:
-        Una lista de diccionarios con los archivos encontrados, cada uno con su id y nombre.
-    """
-    results = service.files().list(
-        q=f"'{id_carpeta}' in parents",
-        fields='nextPageToken, files(id, name)'
-    ).execute()
-    return results.get('files', [])
-
-
-def descargar_archivo(service, file_id, filename):
-    """Descarga un archivo de Google Drive.
-
-    Args:
-        service: El servicio de la API de Drive.
-        file_id: El ID del archivo que se va a descargar.
-        filename: El nombre del archivo para guardar.
-    """
-    request = service.files().get_media(fileId=file_id)
-    fh = io.BytesIO()
-    downloader = MediaIoBaseDownload(fh, request)
-    done = False
-    while not done:
-        status, done = downloader.next_chunk()
-        print(f'Descarga {int(status.progress() * 100)}% completada.')
-
-    with open(filename, 'wb') as f:
-        f.write(fh.getvalue())
-
-
-def actualizar_archivos(id_carpeta):
-    """Actualiza todos los archivos de una carpeta específica de Google Drive."""
-    # Definir el path de descarga
-    global download_path
-    
-    # Verifica si la carpeta de destino existe, si no, la crea
-    if not os.path.exists(download_path):
-        os.makedirs(download_path)
-
-    # Obtener las credenciales
-    creds = obtener_credenciales()
-    # Construir el servicio de la API de Drive
-    service = build('drive', 'v3', credentials=creds)
-
-    # Listar los archivos en la carpeta
-    items = listar_archivos_en_carpeta(service, id_carpeta)
-
-    if not items:
-        print('No se encontraron archivos en la carpeta.')
-    else:
-        print('Archivos:')
-        for item in items:
-            file_path = os.path.join(download_path, item['name'])
-            print(f'Descargando {item["name"]} ({item["id"]}) a {file_path}')
-            try:
-                descargar_archivo(service, item['id'], file_path)
-            except Exception as e:
-                print(f'Error descargando {item["name"]}: {e}')
-
-
-def cargar_videos_de_archivo(file_path):
-    """
-    Carga información de videos (nombres, path, tag asociado) desde un archivo de texto y devuelve una lista de diccionarios.
-
-    Args:
-        file_path (str): Ruta del archivo de texto que contiene la información de los videos.
-
-    Returns:
-        list: Lista de diccionarios con la información (nombres, path, tag asociado) de los videos.
-    """
-    videos = []
-    try:
-        # Abre el archivo en modo de lectura ('r' de read)
-        with open(file_path, 'r') as file:
-            # Itera sobre cada línea del archivo
-            for line in file:
-                # Elimina espacios en blanco alrededor de la línea y divide los elementos por coma
-                video_info = line.strip().split(',')
-                # Verifica si la línea contiene exactamente dos elementos
-                if len(video_info) == 2:
-                    # Agrega un nuevo diccionario a la lista de videos con el ID y la ruta del video
-                    videos.append({'id': video_info[0], 'path': video_info[1]})
-    except Exception as e:
-        # Si se produce un error durante la lectura del archivo, imprime un mensaje de error
-        print(f"Error leyendo videos de archivo: {e}")
-    
-    return videos
-
-
-def inicializar_player(velocidad=1):
-    """
-    Inicializa una instancia de VLC con un nuevo reproductor para los videos del programa.
-
-    Args:
-        velocidad (int, optional): Velocidad de reproducción del video. Por defecto es 1.
-
-    Returns:
-        vlc.MediaPlayer: Instancia del reproductor VLC.
-    """
-
-    # Se crea una instancia VLC y un mediaplayer para reproducir videos
-    instance = vlc.Instance()
-    player = instance.media_player_new()
-    
-    # Se configuran las características del reproductor
-    player.toggle_fullscreen()  # -Pantalla completa
-    player.set_rate(velocidad)  # -Velocidad de reproducción
-
-    return player
-
-
-def play_video(player, media):
-    """
-    Reproduce un video en un objeto 'player' dado con el contenido en 'media'.
-
-    Args:
-        player (vlc.MediaPlayer): Instancia del reproductor VLC.
-        media (vlc.Media): Objeto de media a reproducir.
-    """
-
-    player.set_media(media)
-    player.play()
 
 
 def handle_keyboard(player):
@@ -290,7 +132,7 @@ def main():
     player = inicializar_player()
 
     # Carga los videos para posterior reproducción
-    videos_file_path = './videos/videos.txt'
+    videos_file_path = '../videos/videos.txt'
     videos = cargar_videos_de_archivo(videos_file_path)
     standby_video = videos[-1]['path']
 
