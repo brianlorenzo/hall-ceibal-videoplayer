@@ -1,0 +1,39 @@
+
+body {
+    font-family: sans-serif;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .item {
+    margin: 10px;
+    text-align: center;
+  }
+  
+  .item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+  
+  .button-container {
+    margin-top: 10px;
+  }
+  
+  .button-container input[type="file"] {
+    display: none; /* Oculta el input por defecto */
+  }
+  
+  .button-container label {
+    background-color: #4CAF50; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    padding: 10px 20px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor a una mano al pasar por encima */
+    border-radius: 4px; /* Bordes redondeados */
+  }

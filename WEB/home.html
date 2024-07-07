@@ -1,0 +1,85 @@
+https://lucid.app/lucidchart/344ca281-8b9d-4efe-adb8-5ac3dccffdbd/edit?viewport_loc=-448%2C-17%2C2449%2C1326%2C0_0&invitationId=inv_c9d8d501-9a12-47f3-beef-c128cd5a75ad
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="estilos.css">
+  <title>Subir Archivos</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .item {
+      margin: 10px;
+      text-align: center;
+    }
+    .item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+    .button-container {
+      margin-top: 10px;
+    }
+    .button-container input[type="file"] {
+      display: none;
+    }
+    .button-container label {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>MUEBLE INTERACTIVO</h1>
+  <div class="container">
+    <div class="item">
+      <img src="ruta/a/imagen/C.jpg" alt="C">
+      <div class="button-container">
+        <input type="file" id="uploadC" name="uploadC">
+        <label for="uploadC">Subir</label>
+      </div>
+    </div>
+    
+    <div class="item">
+      <img src="ruta/a/imagen/E.jpg" alt="E">
+      <div class="button-container">
+        <input type="file" id="uploadE" name="uploadE">
+        <label for="uploadE">Subir</label>
+      </div>
+    </div>
+
+    </div>
+  <h1>Dispositivo: Hall de entrada</h1>
+  <div class="container">
+    <div class="item">
+      <img src="ruta/a/imagen/A.jpg" alt="A">
+      <div class="button-container">
+        <input type="file" id="uploadA" name="uploadA">
+        <label for="uploadA">Subir</label>
+      </div>
+    </div>
+    </div>
+
+  <h1>STANDBY</h1>
+  <div class="container">
+    <div class="item">
+      <div class="button-container">
+        <input type="file" id="uploadStandby" name="uploadStandby">
+        <label for="uploadStandby">Subir</label>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
