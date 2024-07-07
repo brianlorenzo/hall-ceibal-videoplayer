@@ -18,6 +18,10 @@ sys.path.append(os.path.join(directorio_actual, "../WEB"))
 # GOOGLE DRIVE
 from google_drive_api import *
 """GUARDAR EL ARCHIVO 'credentials.json' EN ESTA CARPETA"""
+# Configuracion de API Google Drive
+"""SCOPES = ['https://www.googleapis.com/auth/drive']
+id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
+download_path = '../videos/'"""
 
 # VIDEO PLAYER
 from video_player_utils import *
@@ -26,11 +30,6 @@ from video_player_utils import *
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 
-
-# Configuracion de API Google Drive
-SCOPES = ['https://www.googleapis.com/auth/drive']
-id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
-download_path = '../videos/'
 
 # Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
 cerrar_aplicacion = False  
