@@ -36,7 +36,6 @@ download_path = '../videos/'
 cerrar_aplicacion = False  
 
 
-
 def handle_keyboard(player):
     """
     Maneja las entradas del teclado para finalizar el programa al presionar 'q'.
