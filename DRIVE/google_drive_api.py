@@ -8,6 +8,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.http import MediaFileUpload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
+credentials_file = 'credentials.json'
+token_file = 'token.json'
+id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
 
 def obtener_credenciales(credentials_file='credentials.json', token_file='token.json'):
     """Obtiene las credenciales del usuario para acceder a la API de Google Drive.
@@ -142,17 +145,14 @@ def subir_archivo(service, file_path, id_carpeta):
 
 # Llamar a la función actualizar_archivos al final del script
 if __name__ == "__main__":
-    credentials_file = 'credentials.json'
-    token_file = 'token.json'
-    id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
     
     # Construir el servicio de Google Drive
     service = construir_servicio_drive()
     
-   #actualizar_archivos(credentials_file, token_file, id_carpeta)
+    actualizar_archivos(credentials_file, token_file, id_carpeta)
 
     # Ruta del archivo que deseas subir
-    archivo_a_subir = 'hola.txt'
+    #archivo_a_subir = 'hola.txt'
 
     # Subir el archivo a Google Drive
-    subir_archivo(service, archivo_a_subir, id_carpeta)
+    #subir_archivo(service, archivo_a_subir, id_carpeta)

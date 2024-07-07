@@ -7,10 +7,6 @@ import keyboard
 import logging
 import threading
 import sys
-
-# Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
-cerrar_aplicacion = False  
-
 import io
 import os.path
 from googleapiclient.discovery import build
@@ -19,9 +15,14 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
+
+# Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
+cerrar_aplicacion = False  
+
 # Configuracion de Google Drive
 SCOPES = ['https://www.googleapis.com/auth/drive']
 id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
+download_path = '../videos/'
 
 
 def obtener_credenciales():
@@ -80,7 +81,7 @@ def descargar_archivo(service, file_id, filename):
 def actualizar_archivos(id_carpeta):
     """Actualiza todos los archivos de una carpeta específica de Google Drive."""
     # Definir el path de descarga
-    download_path = './videos/'
+    global download_path
     
     # Verifica si la carpeta de destino existe, si no, la crea
     if not os.path.exists(download_path):
@@ -106,7 +107,7 @@ def actualizar_archivos(id_carpeta):
             except Exception as e:
                 print(f'Error descargando {item["name"]}: {e}')
 
-                
+
 def cargar_videos_de_archivo(file_path):
     """
     Carga información de videos (nombres, path, tag asociado) desde un archivo de texto y devuelve una lista de diccionarios.

@@ -1,10 +1,8 @@
-letraC,./videos/pensamiento_computacional.mp4
-letraE,./videos/cei.mp4
-letraI,./videos/ceibal_sostenible.mp4
-letraB,./videos/ingenieria_de_muestra.mp4
-letraA,./videos/olimpiada.mp4
-letraL,./videos/aprendiendo_del_futuro.mp4
-enlace,./videos/enlace360(360p).mp4
-olimpiada,./videos/olimpiada(360p).mp4
+letraC,./videos/letraC.mp4
+letraE,./videos/letraE.mp4
+letraI,./videos/letraI.mp4
+letraB,./videos/letraB.mp4
+letraA,./videos/letraA.mp4
+letraL,./videos/letraL.mp4
 otro,./videos/otro_video.mp4
 standby,./videos/standby.mp4
