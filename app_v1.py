@@ -6,6 +6,7 @@ import keyboard
 import logging
 import threading
 import sys
+
 exit_flag = False  # Bandera para indicar si se presionó la tecla 'q'
 
 def setup_logger():
@@ -47,19 +48,6 @@ def play_video(player, media):
 
     player.set_media(media)
     player.play()
-
-"""
-def switch_video(current_video_index, videos, player):
-    # Pasa al siguiente video de la lista y devuelve el index del mismo
-
-    # Calcula el índice del siguiente video utilizando aritmética modular
-    current_video_index = (current_video_index + 1) % len(videos)
-
-    # Reproduce el siguiente video utilizando el reproductor multimedia VLC
-    play_video(player, vlc.Media(videos[current_video_index]['path']))
-
-    return current_video_index
-"""
 
 def handle_keyboard(player):
     # Handler del teclado
