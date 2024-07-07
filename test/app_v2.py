@@ -1,25 +1,38 @@
 # Bibliotecas
+# SISTEMA
+
 import sys
 import os.path
-
-# Agregar al PATH el repositorio
 directorio_actual = os.path.dirname(os.path.abspath(__file__))
+
+# GOOGLE DRIVE
 sys.path.append(os.path.join(directorio_actual, "DRIVE"))
 
-import RPi.GPIO as GPIO
-from mfrc522 import SimpleMFRC522
-import time
-import vlc
-import keyboard
-import logging
-import threading
-import io
+from google_drive_api import *
+
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.http import MediaFileUpload
+
+# RFID
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+#from rfid_utils import *
+
+# VIDEO PLAYER
+import vlc
+#from videoplayer import *
+
+import time #Se queda aca
+
+import keyboard #Se queda aca
+import logging #Se queda aca
+import threading #Se queda aca
+import io
+
 
 
 # Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
@@ -50,6 +63,7 @@ def obtener_credenciales():
             token.write(creds.to_json())
     return creds
 
+
 def listar_archivos_en_carpeta(service, id_carpeta):
     """Lista todos los archivos en una carpeta específica de Google Drive.
 
@@ -65,6 +79,7 @@ def listar_archivos_en_carpeta(service, id_carpeta):
         fields='nextPageToken, files(id, name)'
     ).execute()
     return results.get('files', [])
+
 
 def descargar_archivo(service, file_id, filename):
     """Descarga un archivo de Google Drive.
@@ -84,6 +99,7 @@ def descargar_archivo(service, file_id, filename):
 
     with open(filename, 'wb') as f:
         f.write(fh.getvalue())
+
 
 def actualizar_archivos(id_carpeta):
     """Actualiza todos los archivos de una carpeta específica de Google Drive."""
