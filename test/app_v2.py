@@ -1,4 +1,11 @@
 # Bibliotecas
+import sys
+import os.path
+
+# Agregar al PATH el repositorio
+directorio_actual = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(directorio_actual, "DRIVE"))
+
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 import time
@@ -6,14 +13,13 @@ import vlc
 import keyboard
 import logging
 import threading
-import sys
 import io
-import os.path
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.http import MediaFileUpload
 
 
 # Bandera global para indicar si se presionó la tecla 'q' para cerrar aplicación
@@ -23,6 +29,7 @@ cerrar_aplicacion = False
 SCOPES = ['https://www.googleapis.com/auth/drive']
 id_carpeta = "17hpy0N-HCGaTHFvdjn5dcKNqSb1MRxIF"
 download_path = '../videos/'
+# GUARDAR EL ARCHIVO 'credentials.json' EN ESTA CARPETA
 
 
 def obtener_credenciales():
